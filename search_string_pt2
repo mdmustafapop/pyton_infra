@@ -1,0 +1,49 @@
+#To create a Python script that can search for a specific string in multiple files across different folders in a GitHub repository, you can follow these steps:
+#Clone the Repository: First, clone the GitHub repository to your local machine. You can do this using the command git clone <repository_url>.
+#Write a Python Script: Write a Python script that will recursively search through the cloned repository's files for the specified string.
+#Here's a basic script to get you started:
+
+
+#Replace 'path_to_your_cloned_repo' with the path to the cloned repository on your system, and 'your_search_string' with the string you want to search for.
+#Run the Script: Execute this script. It will search through all files in the cloned repository and print out the lines where the string is found, along with the file path and line number.
+#Dependencies: Ensure you have Python installed on your machine. This script doesn't require any external libraries.
+#This script can be further customized or expanded depending on your specific requirements, such as searching only specific file types or handling large files more efficiently.
+
+
+import os
+
+def search_string_in_file(file_path, string_to_search):
+    """Search for the given string in file and return lines containing that string, along with line numbers."""
+    line_number = 0
+    list_of_results = []
+    with open(file_path, 'r', encoding='utf-8') as read_obj:
+        for line in read_obj:
+            line_number += 1
+            if string_to_search in line:
+                list_of_results.append((line_number, line.rstrip()))
+    return list_of_results
+
+def search_through_directory(directory_path, string_to_search):
+    """Recursively search through directory for the specified string in all files."""
+    for dirpath, dirnames, filenames in os.walk(directory_path):
+        for file in filenames:
+            full_path = os.path.join(dirpath, file)
+            try:
+                results = search_string_in_file(full_path, string_to_search)
+                if results:
+                    print(f"Found in {full_path}:")
+                    for result in results:
+                        print(f" - Line {result[0]}: {result[1]}")
+            except Exception as e:
+                print(f"Error opening {full_path}: {e}")
+
+# Change this to the path where you've cloned your repo
+repo_path = 'path_to_your_cloned_repo'
+
+# Change this to the string you want to search for
+search_string = 'your_search_string'
+
+search_through_directory(repo_path, search_string)
+
+
+
