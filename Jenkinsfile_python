@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'search_query', defaultValue: '', description: 'Enter the search query')
+    }
+
+    stages {
+        stage('Search') {
+            steps {
+                script {
+                    // Run the Python script passing the search query as a parameter
+                    def scriptOutput = sh(script: "python search_script.py '${params.search_query}'", returnStdout: true).trim()
+                    
+                    // Display the output on the Jenkins console
+                    echo "Search Results:"
+                    echo scriptOutput
+                }
+            }
+        }
+    }
+}
